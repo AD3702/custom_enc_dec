@@ -30,12 +30,12 @@ extension StringExtension on String {
     return base64Encode(utf8.encode(this));
   }
 
-  String encryptAES({required String aesSecret, required String aesSalt}) {
-    return EncryptionHelper.instance.encryptAES(this, aesSecret: aesSecret, aesIv: aesSalt);
+  String encryptAES({required String aesSecret, required String aesIv}) {
+    return EncryptionHelper.instance.encryptAES(this, aesSecret: aesSecret, aesIv: aesIv);
   }
 
-  String decryptAES({required String aesSecret, required String aesSalt}) {
-    return EncryptionHelper.instance.decryptAES(this, aesSecret: aesSecret, aesIv: aesSalt);
+  String decryptAES({required String aesSecret, required String aesIv}) {
+    return EncryptionHelper.instance.decryptAES(this, aesSecret: aesSecret, aesIv: aesIv);
   }
 
   String get encryptRSA {
