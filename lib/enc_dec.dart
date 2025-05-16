@@ -120,9 +120,16 @@ class EncryptionHelper {
 
   /// Function to generate RSA key pair
   Future<(String, String)> generateKey() async {
-    String publicKey = await rootBundle.loadString('packages/kody_enc_dec/lib/asset/pb.txt');
-    String privateKey = await rootBundle.loadString('packages/kody_enc_dec/lib/asset/pr.txt');
+    String publicKey = await rootBundle.loadString('packages/custom_enc_dec/lib/asset/pb.txt');
+    String privateKey = await rootBundle.loadString('packages/custom_enc_dec/lib/asset/pr.txt');
     return (utf8.decode(base64Decode(publicKey)), utf8.decode(base64Decode(privateKey)));
+  }
+
+  /// Function to generate RSA key pair and init RSA Encrypt/Decrypt
+  Future<void> initRSAEncryptDecrypt() async {
+    var (publicKey, privateKey) = await generateKey();
+    initRSAEncryptor(publicKey);
+    initRSADecrypt(privateKey);
   }
 
   /// Function to generate a SecretKey from a plain secret key and salt
