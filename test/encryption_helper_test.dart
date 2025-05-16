@@ -32,17 +32,17 @@ void main() {
 
     test('AES Encryption & Decryption', () {
       // Encrypt the sample text using AES
-      final encryptedText = helper.encryptAES(sampleText, aesSecret: aesPassword, aesSalt: aesSalt);
+      final encryptedText = helper.encryptAES(sampleText, aesSecret: aesPassword, aesIv: aesSalt);
       expect(encryptedText, isNotNull);
 
       // Decrypt the text back
-      final decryptedText = helper.decryptAES(encryptedText, aesSecret: aesPassword, aesSalt: aesSalt);
+      final decryptedText = helper.decryptAES(encryptedText, aesSecret: aesPassword, aesIv: aesSalt);
       expect(decryptedText, equals(sampleText));
     });
 
     test('Invalid AES Decryption should throw error', () {
       const invalidText = 'InvalidEncryptedData';
-      final decryptedText = helper.decryptAES(invalidText, aesSecret: aesPassword, aesSalt: aesSalt);
+      final decryptedText = helper.decryptAES(invalidText, aesSecret: aesPassword, aesIv: aesSalt);
       expect(decryptedText.contains('Exception'), isTrue);
     });
 

@@ -31,11 +31,11 @@ extension StringExtension on String {
   }
 
   String encryptAES({required String aesSecret, required String aesSalt}) {
-    return EncryptionHelper.instance.encryptAES(this, aesSecret: aesSecret, aesSalt: aesSalt);
+    return EncryptionHelper.instance.encryptAES(this, aesSecret: aesSecret, aesIv: aesSalt);
   }
 
   String decryptAES({required String aesSecret, required String aesSalt}) {
-    return EncryptionHelper.instance.decryptAES(this, aesSecret: aesSecret, aesSalt: aesSalt);
+    return EncryptionHelper.instance.decryptAES(this, aesSecret: aesSecret, aesIv: aesSalt);
   }
 
   String get encryptRSA {

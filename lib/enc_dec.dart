@@ -42,7 +42,7 @@ class EncryptionHelper {
   PBKDF2KeyDerivator pbkdf2 = PBKDF2KeyDerivator(HMac(SHA256Digest(), 64));
 
   /// Function to perform AES encryption with a given plain text
-  String encryptAES(String plainText, {required String aesSecret, required String aesSalt}) {
+  String encryptAES(String plainText, {required String aesSecret, required String aesIv}) {
     if (plainText.isEmpty) {
       return plainText;
     }
@@ -50,7 +50,7 @@ class EncryptionHelper {
       // Convert plain text to bytes
       final plainTextBytes = utf8.encode(plainText);
       final key = base64.decode(aesSecret); // Get the derived AES key
-      final iv = base64.decode(aesSalt); // Decode the salt to use as IV
+      final iv = base64.decode(aesIv); // Decode the salt to use as IV
       encryptCipher.init(true, PaddedBlockCipherParameters<ParametersWithIV<KeyParameter>, Null>(ParametersWithIV<KeyParameter>(KeyParameter(key), iv), null));
       // Encrypt the data
       final encryptedBytes = encryptCipher.process(Uint8List.fromList(plainTextBytes));
@@ -64,7 +64,7 @@ class EncryptionHelper {
   }
 
   /// Function to perform AES decryption with a given encrypted text
-  String decryptAES(String encryptedTextBase64, {required String aesSecret, required String aesSalt}) {
+  String decryptAES(String encryptedTextBase64, {required String aesSecret, required String aesIv}) {
     if (encryptedTextBase64.isEmpty) {
       return encryptedTextBase64;
     }
@@ -73,7 +73,7 @@ class EncryptionHelper {
       final encryptedBytes = base64.decode(encryptedTextBase64);
       // Decrypt the data
       final key = base64.decode(aesSecret); // Get the derived AES key
-      final iv = base64.decode(aesSalt); // Decode the salt to use as IV
+      final iv = base64.decode(aesIv); // Decode the salt to use as IV
       decryptCipher.init(false, PaddedBlockCipherParameters<ParametersWithIV<KeyParameter>, Null>(ParametersWithIV<KeyParameter>(KeyParameter(key), iv), null));
       final decryptedBytes = decryptCipher.process(Uint8List.fromList(encryptedBytes));
       // Convert decrypted bytes to string (UTF-8 format)
