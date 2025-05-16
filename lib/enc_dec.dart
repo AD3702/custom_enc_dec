@@ -41,12 +41,6 @@ class EncryptionHelper {
   PaddedBlockCipherImpl decryptCipher = PaddedBlockCipherImpl(PKCS7Padding(), CBCBlockCipher(AESEngine())); // Cipher for AES decryption
   PBKDF2KeyDerivator pbkdf2 = PBKDF2KeyDerivator(HMac(SHA256Digest(), 64));
 
-  /// Initialize AES keys using plain secret and salt
-  String initAESKeys(String aesSecret, String aesSalt) {
-    final secretKey = getKeyFromPlainSecretKeyAndSalt(aesSecret, aesSalt); // Derive the AES key
-    return secretKey;
-  }
-
   /// Function to perform AES encryption with a given plain text
   String encryptAES(String plainText, {required String aesSecret, required String aesSalt}) {
     if (plainText.isEmpty) {
@@ -113,33 +107,9 @@ class EncryptionHelper {
     return utf8.decode(output);
   }
 
-  /// Function to generate a key-value pair (public and private keys)
-  Future<(String, String)> generateKeyValuePair() async {
-    return generateKey(); // Return the key pair
-  }
-
-  /// Function to generate RSA key pair
-  Future<(String, String)> generateKey() async {
-    String publicKey = await rootBundle.loadString('packages/custom_enc_dec/lib/asset/pb.txt');
-    String privateKey = await rootBundle.loadString('packages/custom_enc_dec/lib/asset/pr.txt');
-    return (utf8.decode(base64Decode(publicKey)), utf8.decode(base64Decode(privateKey)));
-  }
-
   /// Function to generate RSA key pair and init RSA Encrypt/Decrypt
-  Future<void> initRSAEncryptDecrypt() async {
-    var (publicKey, privateKey) = await generateKey();
+  Future<void> initRSAEncryptDecrypt(String publicKey, String privateKey) async {
     initRSAEncryptor(publicKey);
     initRSADecrypt(privateKey);
-  }
-
-  /// Function to generate a SecretKey from a plain secret key and salt
-  String getKeyFromPlainSecretKeyAndSalt(String plainSecretKey, String salt) {
-    // Convert salt to bytes
-    final saltBytes = utf8.encode(salt);
-    pbkdf2.init(Pbkdf2Parameters(Uint8List.fromList(saltBytes), 65536, 32)); // Initialize with salt and iterations
-    // Derive the key
-    final derivedKey = pbkdf2.process(utf8.encode(plainSecretKey));
-    // Create and return the SecretKey
-    return base64Encode(derivedKey);
   }
 }

@@ -18,7 +18,6 @@ void main() {
       // Initialize RSA and AES keys before tests
       helper.initRSAEncryptor(rsaPublicKey);
       helper.initRSADecrypt(rsaPrivateKey);
-      aesPassword = helper.initAESKeys(aesSecret, aesSalt);
     });
 
     test('RSA Encryption & Decryption', () async {
@@ -39,12 +38,6 @@ void main() {
       // Decrypt the text back
       final decryptedText = helper.decryptAES(encryptedText, aesSecret: aesPassword, aesSalt: aesSalt);
       expect(decryptedText, equals(sampleText));
-    });
-
-    test('AES Key Generation', () {
-      // Generate a derived AES key
-      final derivedKey = helper.getKeyFromPlainSecretKeyAndSalt(aesSecret, aesSalt);
-      expect(derivedKey, isNotEmpty);
     });
 
     test('Invalid AES Decryption should throw error', () {
